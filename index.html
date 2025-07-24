@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RSS Reader</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container py-5">
+      <h1 class="mb-4">RSS Reader</h1>
+
+      <form class="rss-form">
+        <div class="mb-3">
+          <input
+            type="url"
+            name="url"
+            class="form-control"
+            placeholder="Ссылка RSS"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Добавить</button>
+      </form>
+
+      <div class="feedback mt-2 text-danger"></div>
+      <div class="feeds mt-4"></div>
+      <div class="posts mt-4"></div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
