@@ -1,42 +1,34 @@
-import onChange from 'on-change'
-import validate from './validation.js'
-import view from './view.js'
+ import * as yup from 'yup'
+import i18next from 'i18next'
 
 export default () => {
-  const form = document.querySelector('form')
-  const input = form.querySelector('input')
+  const form = document.querySelector('.rss-form')
+  const input = form.elements.url
   const feedback = document.querySelector('.feedback')
 
-  const state = {
-    urls: [],
-    form: {
-      valid: true,
-      error: null,
-    },
-  }
-
-  const watchedState = onChange(state, (path, value) => {
-    if (path === 'form.valid' && value) {
-      view.renderValid(input, feedback)
-    } else if (path === 'form.error') {
-      view.renderInvalid(input, feedback, value)
-    }
-  })
+  const urls = new Set()
 
   form.addEventListener('submit', (e) => {
     e.preventDefault()
     const url = input.value.trim()
-    const validateUrl = validate(watchedState.urls)
 
-    validateUrl(url)
+    const schema = yup.string().url().required().notOneOf([...urls])
+    schema.validate(url)
       .then(() => {
-        watchedState.urls.push(url)
-        watchedState.form.valid = true
-        view.resetForm(form)
+        urls.add(url)
+        input.classList.remove('is-invalid')
+        feedback.textContent = ''
+        input.value = ''
+        input.focus()
+        feedback.classList.remove('text-danger')
+        feedback.classList.add('text-success')
+        feedback.textContent = i18next.t('form.success')
       })
       .catch((err) => {
-        watchedState.form.valid = false
-        watchedState.form.error = err.message
+        input.classList.add('is-invalid')
+        feedback.classList.remove('text-success')
+        feedback.classList.add('text-danger')
+        feedback.textContent = err.message
       })
   })
 }

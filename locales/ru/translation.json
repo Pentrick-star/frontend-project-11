@@ -1,0 +1,10 @@
+{
+  "form": {
+    "inputPlaceholder": "Ссылка RSS",
+    "submit": "Добавить",
+    "errors": {
+      "invalidUrl": "Ссылка должна быть валидным URL",
+      "duplicate": "RSS уже существует"
+    }
+  }
+}
