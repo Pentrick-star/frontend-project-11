@@ -1,8 +1,8 @@
 import initI18n from './i18n.js'
-import setYupLocale from './yupLocale.js'
-import initApp from './app.js'
+import initApp from './initApp.js'
+import updatePosts from './updatePosts.js'
 
 initI18n().then(() => {
-  setYupLocale()
-  initApp()
+  const { state, watchedState } = initApp()
+  updatePosts(state, watchedState)
 })
