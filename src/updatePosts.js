@@ -1,5 +1,5 @@
 import axios from 'axios'
-import parser from './parser.js'
+import parse from './utils/parseRss.js'
 
 const getFeedData = (url) => {
   const proxyUrl = `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`
@@ -12,7 +12,7 @@ const updatePosts = (state, watchedState) => {
   const promises = state.feeds.map((feed) => {
     return getFeedData(feed.url)
       .then((rawData) => {
-        const { posts } = parser(rawData)
+        const { posts } = parse(rawData)
         const existingLinks = state.posts.map((post) => post.link)
 
         const newPosts = posts
