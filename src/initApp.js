@@ -1,18 +1,20 @@
+import { v4 as uuidv4 } from 'uuid'
 import loadRss from './utils/loadRss.js'
 import parseRss from './utils/parseRss.js'
-import onChange from 'on-change'
-import { v4 as uuidv4 } from 'uuid'
+import render from './view.js'
 
 const initApp = (i18nInstance) => {
   const state = {
     feeds: [],
     posts: [],
+    readPosts: new Set(),
+    modalPostId: null,
     form: {
       valid: true,
       error: null,
     },
     loading: {
-      state: 'idle', // 'loading', 'failed', 'success'
+      state: 'idle',
       error: null,
     },
   }
@@ -20,14 +22,13 @@ const initApp = (i18nInstance) => {
   const elements = {
     form: document.querySelector('.rss-form'),
     input: document.querySelector('input[name="url"]'),
-    feedsContainer: document.querySelector('.feeds'),
-    postsContainer: document.querySelector('.posts'),
+    feedback: document.querySelector('.feedback'),
+    feeds: document.querySelector('.feeds'),
+    posts: document.querySelector('.posts'),
     submit: document.querySelector('button[type="submit"]'),
   }
 
-  const watchedState = onChange(state, (path, value) => {
-    // тут позже добавим отрисовку фидов и постов
-  })
+  const watchedState = render(elements, state)
 
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault()
@@ -50,7 +51,6 @@ const initApp = (i18nInstance) => {
         watchedState.posts.push(...newPosts)
         watchedState.loading.state = 'success'
 
-        // очищаем форму
         elements.form.reset()
         elements.input.focus()
       })
@@ -59,6 +59,15 @@ const initApp = (i18nInstance) => {
         watchedState.loading.error = err.isParsing ? 'invalidRSS' : 'networkError'
       })
   })
+
+  elements.posts.addEventListener('click', (e) => {
+    if (e.target.tagName === 'BUTTON') {
+      const postId = e.target.dataset.id
+      watchedState.modalPostId = postId
+    }
+  })
+
+  return { state, watchedState }
 }
 
 export default initApp

@@ -1,5 +1,4 @@
 import onChange from 'on-change'
-import { Modal } from 'bootstrap'
 
 const renderValid = (input, feedback) => {
   input.classList.remove('is-invalid')
@@ -18,6 +17,7 @@ const resetForm = (form) => {
 
 const renderFeeds = (feeds, container) => {
   container.innerHTML = ''
+
   const card = document.createElement('div')
   card.classList.add('card', 'border-0')
 
@@ -54,8 +54,9 @@ const renderFeeds = (feeds, container) => {
   container.append(card)
 }
 
-const renderPosts = (posts, readPosts, container, state) => {
+const renderPosts = (posts, readPosts, container) => {
   container.innerHTML = ''
+
   const card = document.createElement('div')
   card.classList.add('card', 'border-0')
 
@@ -74,7 +75,14 @@ const renderPosts = (posts, readPosts, container, state) => {
 
   posts.forEach((post) => {
     const item = document.createElement('li')
-    item.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0')
+    item.classList.add(
+      'list-group-item',
+      'd-flex',
+      'justify-content-between',
+      'align-items-start',
+      'border-0',
+      'border-end-0',
+    )
 
     const link = document.createElement('a')
     link.setAttribute('href', post.link)
@@ -112,32 +120,35 @@ const renderModal = (post) => {
 
 const render = (elements, state) => {
   const watchedState = onChange(state, (path, value) => {
-    if (path === 'form.valid') {
-      if (value) {
-        renderValid(elements.input, elements.feedback)
+    switch (path) {
+      case 'form.valid':
+        if (value) {
+          renderValid(elements.input, elements.feedback)
+        }
+        break
+
+      case 'form.error':
+        renderInvalid(elements.input, elements.feedback, value)
+        break
+
+      case 'feeds':
+        renderFeeds(state.feeds, elements.feeds)
+        break
+
+      case 'posts':
+      case 'readPosts':
+        renderPosts(state.posts, state.readPosts, elements.posts)
+        break
+
+      case 'modalPostId': {
+        const post = state.posts.find((p) => p.id === value)
+        renderModal(post)
+        state.readPosts.add(post.id)
+        break
       }
-    }
 
-    if (path === 'form.error') {
-      renderInvalid(elements.input, elements.feedback, value)
-    }
-
-    if (path === 'form.processed') {
-      resetForm(elements.form)
-    }
-
-    if (path === 'feeds') {
-      renderFeeds(state.feeds, elements.feeds)
-    }
-
-    if (path === 'posts' || path === 'readPosts') {
-      renderPosts(state.posts, state.readPosts, elements.posts, state)
-    }
-
-    if (path === 'modalPostId') {
-      const post = state.posts.find((p) => p.id === value)
-      renderModal(post)
-      state.readPosts.add(post.id)
+      default:
+        break
     }
   })
 
