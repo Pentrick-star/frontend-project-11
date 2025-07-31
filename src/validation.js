@@ -1,10 +1,10 @@
 import * as yup from 'yup'
+import i18next from 'i18next'
 
-export default (urls) => {
+export default (url, urls) => {
   const schema = yup.string()
-    .required('URL обязателен')
-    .url('Ссылка должна быть валидным URL')
-    .notOneOf(urls, 'RSS уже существует')
+    .url(i18next.t('form.errors.invalidUrl'))
+    .notOneOf([...urls], i18next.t('form.errors.duplicate'))
 
-  return (url) => schema.validate(url, { abortEarly: false })
+  return schema.validate(url)
 }
