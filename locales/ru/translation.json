@@ -1,0 +1,17 @@
+{
+  "app": {
+    "title": "RSS Reader",
+    "form": {
+      "inputPlaceholder": "Ссылка RSS",
+      "submit": "Добавить"
+    },
+    "messages": {
+      "success": "RSS успешно загружен",
+      "errors": {
+        "invalidUrl": "Ссылка должна быть валидным URL",
+        "required": "Не должно быть пустым",
+        "alreadyExists": "RSS уже существует"
+      }
+    }
+  }
+}
