@@ -1,4 +1,4 @@
-export default (state, elements) => {
+export default (state, elements, i18n) => {
   const { inputEl, feedbackEl } = elements
 
   const renderForm = (formState) => {
@@ -7,7 +7,7 @@ export default (state, elements) => {
         inputEl.classList.remove('is-invalid')
         feedbackEl.classList.remove('text-danger')
         feedbackEl.classList.add('text-success')
-        feedbackEl.textContent = 'RSS успешно загружен'
+        feedbackEl.textContent = i18n.t('feedback.success')
         inputEl.value = ''
         inputEl.focus()
         break
@@ -16,7 +16,7 @@ export default (state, elements) => {
         inputEl.classList.add('is-invalid')
         feedbackEl.classList.remove('text-success')
         feedbackEl.classList.add('text-danger')
-        feedbackEl.textContent = formState.error
+        feedbackEl.textContent = i18n.t(formState.error) || i18n.t('feedback.errors.unknown')
         break
 
       default:

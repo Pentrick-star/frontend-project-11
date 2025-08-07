@@ -1,5 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import onChange from 'on-change'
+import i18nInit from './i18n.js'
+import setYupLocale from './yupLocale.js'
 import validate from './validation.js'
 import initView from './view.js'
 
@@ -20,22 +22,25 @@ const elements = {
 elements.feedbackEl.classList.add('feedback', 'mt-2')
 elements.inputEl.after(elements.feedbackEl)
 
-const watchedState = onChange(state, initView(state, elements))
+const i18nPromise = i18nInit()
+setYupLocale()
 
-elements.formEl.addEventListener('submit', (e) => {
-  e.preventDefault()
-  const formData = new FormData(e.target)
-  const url = formData.get('url').trim()
+i18nPromise.then((i18n) => {
+  const watchedState = onChange(state, initView(state, elements, i18n))
 
-  const urls = state.feeds.map((feed) => feed.url)
+  elements.formEl.addEventListener('submit', (e) => {
+    e.preventDefault()
+    const formData = new FormData(e.target)
+    const url = formData.get('url').trim()
+    const urls = state.feeds.map((feed) => feed.url)
 
-  validate(url, urls)
-    .then(() => {
-      // Условная заглушка добавления ленты
-      state.feeds.push({ url })
-      watchedState.form = { status: 'valid', error: null }
-    })
-    .catch((err) => {
-      watchedState.form = { status: 'invalid', error: 'Ссылка невалидна или уже добавлена' }
-    })
+    validate(url, urls)
+      .then(() => {
+        state.feeds.push({ url })
+        watchedState.form = { status: 'valid', error: null }
+      })
+      .catch((err) => {
+        watchedState.form = { status: 'invalid', error: err.message }
+      })
+  })
 })
