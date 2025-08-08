@@ -16,10 +16,8 @@ const resources = {
   },
 }
 
-const initI18n = () => i18next.init({
+export default () => i18next.createInstance().init({
   lng: 'ru',
   debug: false,
   resources,
 })
-
-export default initI18n
