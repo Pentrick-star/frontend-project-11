@@ -1,5 +1,9 @@
 {
-  "feeds": "Feeds",
-  "posts": "Posts",
-  "view": "View"
+  "rssLoaded": "RSS has been loaded",
+  "rssExists": "RSS already exists",
+  "empty": "Must not be empty",
+  "invalidUrl": "Link must be a valid URL",
+  "noValidRss": "The resource does not contain valid RSS",
+  "view": "View",
+  "networkError": "Network error"
 }

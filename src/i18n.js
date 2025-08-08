@@ -1,23 +1,17 @@
-import i18next from 'i18next'
+import i18n from 'i18next'
 
-const resources = {
-  ru: {
-    translation: {
-      feedback: {
-        success: 'RSS успешно загружен',
-        errors: {
-          invalidUrl: 'Ссылка должна быть валидным URL',
-          alreadyExists: 'RSS уже существует',
-          required: 'Поле не должно быть пустым',
-          unknown: 'Неизвестная ошибка',
-        },
-      },
+import ru from '../locales/ru/translation.json'
+import en from '../locales/en/translation.json'
+
+export default () => {
+  const instance = i18n.createInstance()
+  return instance.init({
+    lng: 'ru',
+    fallbackLng: 'en',
+    debug: false,
+    resources: {
+      ru: { translation: ru },
+      en: { translation: en },
     },
-  },
+  })
 }
-
-export default () => i18next.createInstance().init({
-  lng: 'ru',
-  debug: false,
-  resources,
-})

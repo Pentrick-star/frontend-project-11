@@ -1,16 +1,29 @@
-export default (data) => {
+export default (xmlString) => {
   const parser = new DOMParser()
-  const doc = parser.parseFromString(data, 'application/xml')
+  const xml = parser.parseFromString(xmlString, 'application/xml')
 
-  const feed = {
-    title: doc.querySelector('channel > title').textContent,
-    description: doc.querySelector('channel > description').textContent,
+  const parserError = xml.querySelector('parsererror')
+  if (parserError) {
+    throw new Error('invalidRss')
   }
 
-  const posts = Array.from(doc.querySelectorAll('item')).map((item) => ({
-    title: item.querySelector('title').textContent,
-    link: item.querySelector('link').textContent,
-    description: item.querySelector('description').textContent,
+  const channel = xml.querySelector('channel')
+  if (!channel) {
+    throw new Error('invalidRss')
+  }
+
+  const feed = {
+    title: channel.querySelector('title')?.textContent ?? '',
+    description: channel.querySelector('description')?.textContent ?? '',
+  }
+
+  const items = xml.querySelectorAll('item')
+
+  const posts = Array.from(items).map((item) => ({
+    id: item.querySelector('guid')?.textContent || item.querySelector('link')?.textContent,
+    title: item.querySelector('title')?.textContent ?? '',
+    description: item.querySelector('description')?.textContent ?? '',
+    link: item.querySelector('link')?.textContent ?? '',
   }))
 
   return { feed, posts }
