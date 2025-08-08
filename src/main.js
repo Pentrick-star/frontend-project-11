@@ -1,46 +1,90 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
+import axios from 'axios'
 import onChange from 'on-change'
-import i18nInit from './i18n.js'
-import setYupLocale from './yupLocale.js'
-import validate from './validation.js'
+import i18next from 'i18next'
 import initView from './view.js'
+import resources from './locales/index.js'
+import parse from './utils/parse.js'
 
-const state = {
-  form: {
-    status: null,
-    error: null,
-  },
-  feeds: [],
-}
+export default () => {
+  const state = {
+    feeds: [],
+    posts: [],
+    readPosts: new Set(),
+    form: {
+      status: 'filling',
+      error: null,
+    },
+  }
 
-const elements = {
-  formEl: document.querySelector('.rss-form'),
-  inputEl: document.querySelector('input[name="url"]'),
-  feedbackEl: document.createElement('p'),
-}
+  const i18n = i18next.createInstance()
+  i18n.init({
+    lng: 'ru',
+    resources,
+  })
 
-elements.feedbackEl.classList.add('feedback', 'mt-2')
-elements.inputEl.after(elements.feedbackEl)
+  const watchedState = onChange(state, initView(state, i18n))
 
-const i18nPromise = i18nInit()
-setYupLocale()
-
-i18nPromise.then((i18n) => {
-  const watchedState = onChange(state, initView(state, elements, i18n))
-
-  elements.formEl.addEventListener('submit', (e) => {
+  const form = document.querySelector('.rss-form')
+  form.addEventListener('submit', (e) => {
     e.preventDefault()
     const formData = new FormData(e.target)
     const url = formData.get('url').trim()
-    const urls = state.feeds.map((feed) => feed.url)
 
-    validate(url, urls)
-      .then(() => {
-        state.feeds.push({ url })
-        watchedState.form = { status: 'valid', error: null }
+    if (state.feeds.some((feed) => feed.url === url)) {
+      watchedState.form.error = 'urlExists'
+      watchedState.form.status = 'error'
+      return
+    }
+
+    watchedState.form.status = 'sending'
+    watchedState.form.error = null
+
+    const allOriginsUrl = `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(
+      url,
+    )}`
+
+    axios
+      .get(allOriginsUrl)
+      .then((response) => {
+        const { feed, posts } = parse(response.data.contents)
+        feed.url = url
+        watchedState.feeds.unshift(feed)
+        watchedState.posts.unshift(...posts)
+        watchedState.form.status = 'success'
       })
-      .catch((err) => {
-        watchedState.form = { status: 'invalid', error: err.message }
+      .catch(() => {
+        watchedState.form.status = 'error'
+        watchedState.form.error = 'network'
       })
   })
-})
+
+  // Обработчик клика на кнопку просмотра
+  const postsList = document.querySelector('.posts-list')
+  postsList.addEventListener('click', (e) => {
+    if (e.target.tagName === 'BUTTON') {
+      const postId = e.target.dataset.id
+      const post = state.posts.find((p) => p.id === postId)
+      if (!post) return
+
+      // Помечаем пост как прочитанный
+      watchedState.readPosts.add(postId)
+
+      // Обновляем список постов
+      watchedState.posts = [...watchedState.posts]
+
+      // Показываем модальное окно
+      const modalLabel = document.getElementById('modalLabel')
+      const modalBody = document.querySelector('.modal-body')
+      const modalLink = document.getElementById('modalLink')
+
+      modalLabel.textContent = post.title
+      modalBody.textContent = post.description
+      modalLink.href = post.link
+
+      // Bootstrap 5 modal
+      const modalElement = document.getElementById('modal')
+      const modal = new bootstrap.Modal(modalElement)
+      modal.show()
+    }
+  })
+}

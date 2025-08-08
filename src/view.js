@@ -1,84 +1,73 @@
-export default (state, i18n) => () => {
-  const feedsContainer = document.querySelector('.feeds')
-  const postsContainer = document.querySelector('.posts')
-
-  feedsContainer.innerHTML = ''
-  postsContainer.innerHTML = ''
-
-  if (state.feeds.length > 0) {
-    const feedsCard = document.createElement('div')
-    feedsCard.classList.add('card', 'border-0')
-
-    const feedsCardBody = document.createElement('div')
-    feedsCardBody.classList.add('card-body')
-
-    const feedsTitle = document.createElement('h2')
-    feedsTitle.classList.add('card-title', 'h4')
-    feedsTitle.textContent = i18n.t('feeds')
-
-    feedsCardBody.append(feedsTitle)
-    feedsCard.append(feedsCardBody)
-
-    const feedsList = document.createElement('ul')
-    feedsList.classList.add('list-group', 'border-0', 'rounded-0')
+export default (state, i18nInstance) => (path, value) => {
+  if (path === 'feeds') {
+    const feedsList = document.querySelector('.feeds-list')
+    feedsList.innerHTML = ''
 
     state.feeds.forEach((feed) => {
-      const li = document.createElement('li')
-      li.classList.add('list-group-item', 'border-0', 'border-end-0')
+      const feedItem = document.createElement('li')
+      feedItem.classList.add('list-group-item')
 
-      const h3 = document.createElement('h3')
-      h3.classList.add('h6', 'm-0')
-      h3.textContent = feed.title
+      const title = document.createElement('h3')
+      title.textContent = feed.title
 
-      const p = document.createElement('p')
-      p.classList.add('m-0', 'small', 'text-black-50')
-      p.textContent = feed.description
+      const description = document.createElement('p')
+      description.textContent = feed.description
 
-      li.append(h3, p)
-      feedsList.append(li)
+      feedItem.append(title, description)
+      feedsList.append(feedItem)
     })
-
-    feedsCard.append(feedsList)
-    feedsContainer.append(feedsCard)
   }
 
-  if (state.posts.length > 0) {
-    const postsCard = document.createElement('div')
-    postsCard.classList.add('card', 'border-0')
-
-    const postsCardBody = document.createElement('div')
-    postsCardBody.classList.add('card-body')
-
-    const postsTitle = document.createElement('h2')
-    postsTitle.classList.add('card-title', 'h4')
-    postsTitle.textContent = i18n.t('posts')
-
-    postsCardBody.append(postsTitle)
-    postsCard.append(postsCardBody)
-
-    const postsList = document.createElement('ul')
-    postsList.classList.add('list-group', 'border-0', 'rounded-0')
+  if (path === 'posts' || path === 'readPosts') {
+    const postsList = document.querySelector('.posts-list')
+    postsList.innerHTML = ''
 
     state.posts.forEach((post) => {
-      const li = document.createElement('li')
-      li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0')
+      const postItem = document.createElement('li')
+      postItem.classList.add(
+        'list-group-item',
+        'd-flex',
+        'justify-content-between',
+        'align-items-start'
+      )
 
-      const a = document.createElement('a')
-      a.setAttribute('href', post.link)
-      a.setAttribute('target', '_blank')
-      a.setAttribute('rel', 'noopener noreferrer')
-      a.textContent = post.title
+      const postTitle = document.createElement('a')
+      postTitle.href = post.link
+      postTitle.target = '_blank'
+      postTitle.rel = 'noopener noreferrer'
+      postTitle.textContent = post.title
+      postTitle.classList.add(state.readPosts.has(post.id) ? 'fw-normal' : 'fw-bold')
 
       const button = document.createElement('button')
-      button.setAttribute('type', 'button')
+      button.type = 'button'
       button.classList.add('btn', 'btn-outline-primary', 'btn-sm')
-      button.textContent = i18n.t('view')
+      button.textContent = i18nInstance.t('view')
+      button.dataset.id = post.id
+      button.setAttribute('aria-label', i18nInstance.t('view'))
 
-      li.append(a, button)
-      postsList.append(li)
+      postItem.append(postTitle, button)
+      postsList.append(postItem)
     })
+  }
 
-    postsCard.append(postsList)
-    postsContainer.append(postsCard)
+  if (path === 'form.status') {
+    const submitButton = document.querySelector('button[type="submit"]')
+    if (value === 'sending') {
+      submitButton.disabled = true
+    } else {
+      submitButton.disabled = false
+    }
+  }
+
+  if (path === 'form.error') {
+    const feedback = document.querySelector('.feedback')
+    if (!feedback) return
+    if (value) {
+      feedback.textContent = i18nInstance.t(`errors.${value}`)
+      feedback.classList.add('text-danger')
+    } else {
+      feedback.textContent = ''
+      feedback.classList.remove('text-danger')
+    }
   }
 }
