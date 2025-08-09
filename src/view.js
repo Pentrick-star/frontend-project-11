@@ -1,12 +1,10 @@
 export default (state, elements, i18n) => {
   const { feedback, input, submit, feedsList, postsList } = elements
 
-  // Сброс классов ошибок и текста
   input.classList.remove('is-invalid')
   feedback.classList.remove('invalid-feedback', 'text-success')
   feedback.textContent = ''
 
-  // Обработка статуса формы
   if (state.form.status === 'filling') {
     submit.disabled = false
   }
@@ -25,11 +23,11 @@ export default (state, elements, i18n) => {
   if (state.form.status === 'success') {
     submit.disabled = false
     input.value = ''
-    feedback.textContent = i18n.t('rssLoaded')
+    feedback.textContent = i18n.t('success.rssLoaded') // <-- здесь исправлено
     feedback.classList.add('text-success')
   }
 
-  // Отрисовка фидов
+  // Рендеринг фидов
   feedsList.innerHTML = ''
   state.feeds.forEach((feed) => {
     const li = document.createElement('li')
@@ -45,7 +43,7 @@ export default (state, elements, i18n) => {
     feedsList.append(li)
   })
 
-  // Отрисовка постов
+  // Рендеринг постов
   postsList.innerHTML = ''
   state.posts.forEach((post) => {
     const li = document.createElement('li')
