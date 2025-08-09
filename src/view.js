@@ -1,5 +1,47 @@
+export const renderPosts = (state, elements, i18n) => {
+  const { feedsList, postsList } = elements
+
+  feedsList.innerHTML = ''
+  state.feeds.forEach((feed) => {
+    const li = document.createElement('li')
+    li.classList.add('list-group-item')
+
+    const title = document.createElement('h3')
+    title.textContent = feed.title
+
+    const description = document.createElement('p')
+    description.textContent = feed.description
+
+    li.append(title, description)
+    feedsList.append(li)
+  })
+
+  postsList.innerHTML = ''
+  state.posts.forEach((post) => {
+    const li = document.createElement('li')
+    li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start')
+
+    const a = document.createElement('a')
+    a.href = post.link
+    a.target = '_blank'
+    a.rel = 'noopener noreferrer'
+    a.textContent = post.title
+    a.classList.add(state.readPosts.has(post.id) ? 'fw-normal' : 'fw-bold')
+
+    const button = document.createElement('button')
+    button.type = 'button'
+    button.classList.add('btn', 'btn-outline-primary', 'btn-sm')
+    button.textContent = i18n.t('view')
+    button.dataset.id = post.id
+    button.setAttribute('aria-label', i18n.t('view'))
+
+    li.append(a, button)
+    postsList.append(li)
+  })
+}
+
 export default (state, elements, i18n) => {
-  const { feedback, input, submit, feedsList, postsList } = elements
+  const { feedback, input, submit } = elements
 
   input.classList.remove('is-invalid')
   feedback.classList.remove('invalid-feedback', 'text-success')
@@ -23,47 +65,9 @@ export default (state, elements, i18n) => {
   if (state.form.status === 'success') {
     submit.disabled = false
     input.value = ''
-    feedback.textContent = i18n.t('success.rssLoaded') // <-- здесь исправлено
+    feedback.textContent = i18n.t('success.rssLoaded')
     feedback.classList.add('text-success')
   }
 
-  // Рендеринг фидов
-  feedsList.innerHTML = ''
-  state.feeds.forEach((feed) => {
-    const li = document.createElement('li')
-    li.classList.add('list-group-item')
-
-    const title = document.createElement('h3')
-    title.textContent = feed.title
-
-    const description = document.createElement('p')
-    description.textContent = feed.description
-
-    li.append(title, description)
-    feedsList.append(li)
-  })
-
-  // Рендеринг постов
-  postsList.innerHTML = ''
-  state.posts.forEach((post) => {
-    const li = document.createElement('li')
-    li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start')
-
-    const a = document.createElement('a')
-    a.href = post.link
-    a.target = '_blank'
-    a.rel = 'noopener noreferrer'
-    a.textContent = post.title
-    a.classList.add(state.readPosts.has(post.id) ? 'fw-normal' : 'fw-bold')
-
-    const button = document.createElement('button')
-    button.type = 'button'
-    button.classList.add('btn', 'btn-outline-primary', 'btn-sm')
-    button.textContent = i18n.t('view')
-    button.dataset.id = post.id
-    button.setAttribute('aria-label', i18n.t('view'))
-
-    li.append(a, button)
-    postsList.append(li)
-  })
+  renderPosts(state, elements, i18n)
 }
