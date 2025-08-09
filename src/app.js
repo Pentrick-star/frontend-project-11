@@ -28,7 +28,7 @@ const updatePosts = (watchedState, i18n) => {
           const newPostsWithIds = newPosts.map((post) => ({
             ...post,
             id: _.uniqueId('post_'),
-            feedId: feed.id,
+            feedId: feed.id
           }))
 
           watchedState.posts.unshift(...newPostsWithIds)
@@ -51,14 +51,14 @@ export default () => {
     posts: [],
     form: {
       status: 'filling',
-      error: null,
-    },
+      error: null
+    }
   }
 
   const i18n = i18next.createInstance()
   i18n.init({
     lng: 'ru',
-    resources,
+    resources
   })
 
   const watchedState = onChange(state, initView(state, i18n))
@@ -80,7 +80,7 @@ export default () => {
         const postsWithId = posts.map((post) => ({
           ...post,
           id: _.uniqueId('post_'),
-          feedId: feed.id,
+          feedId: feed.id
         }))
 
         watchedState.feeds.unshift(feed)

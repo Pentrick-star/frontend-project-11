@@ -19,7 +19,7 @@ const app = async () => {
     lng: 'ru',
     fallbackLng: 'en',
     debug: false,
-    resources,
+    resources
   })
 
   const state = {
@@ -28,8 +28,8 @@ const app = async () => {
     readPosts: new Set(),
     form: {
       status: 'filling',
-      error: null,
-    },
+      error: null
+    }
   }
 
   const elements = {
@@ -38,7 +38,7 @@ const app = async () => {
     feedback: document.querySelector('.feedback'),
     submit: document.querySelector('button[type="submit"]'),
     feedsList: document.querySelector('.feeds-list'),
-    postsList: document.querySelector('.posts-list'),
+    postsList: document.querySelector('.posts-list')
   }
 
   const watchedState = onChange(state, () => initView(state, elements, i18n))
@@ -70,7 +70,7 @@ const app = async () => {
         const postsWithId = posts.map((post) => ({
           ...post,
           id: _.uniqueId('post_'),
-          feedId: feed.id,
+          feedId: feed.id
         }))
 
         watchedState.feeds.unshift(feed)

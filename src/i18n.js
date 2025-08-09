@@ -11,7 +11,7 @@ export default () => {
     debug: false,
     resources: {
       ru: { translation: ru },
-      en: { translation: en },
-    },
+      en: { translation: en }
+    }
   })
 }

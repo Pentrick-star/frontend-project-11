@@ -22,7 +22,7 @@ const updatePosts = (state, elements, i18n) => {
           const newPostsWithIds = newPosts.map((post) => ({
             ...post,
             id: _.uniqueId('post_'),
-            feedId: feed.id,
+            feedId: feed.id
           }))
           state.posts = [...newPostsWithIds, ...state.posts]
           renderPosts(state, elements, i18n)

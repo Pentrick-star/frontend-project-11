@@ -14,7 +14,7 @@ export default (xmlString) => {
 
   const feed = {
     title: channel.querySelector('title')?.textContent ?? '',
-    description: channel.querySelector('description')?.textContent ?? '',
+    description: channel.querySelector('description')?.textContent ?? ''
   }
 
   const items = xml.querySelectorAll('item')
@@ -23,7 +23,7 @@ export default (xmlString) => {
     id: item.querySelector('guid')?.textContent || item.querySelector('link')?.textContent,
     title: item.querySelector('title')?.textContent ?? '',
     description: item.querySelector('description')?.textContent ?? '',
-    link: item.querySelector('link')?.textContent ?? '',
+    link: item.querySelector('link')?.textContent ?? ''
   }))
 
   return { feed, posts }
