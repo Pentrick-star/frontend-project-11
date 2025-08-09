@@ -98,7 +98,6 @@ const app = async () => {
       const id = e.target.dataset.id
       watchedState.readPosts.add(id)
       initView(state, elements, i18n)
-      // Здесь можно открыть модальное окно с содержимым поста (если нужно)
     }
   })
 }
