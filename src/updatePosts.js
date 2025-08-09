@@ -1,6 +1,6 @@
 import axios from 'axios'
 import _ from 'lodash'
-import parse from './utils/parser.js'
+import parse from './utils/parse.js'
 import { renderPosts } from './view.js'
 
 const getProxiedUrl = (url) => {
