@@ -131,7 +131,7 @@ export default () => {
           feedData.url = url
           feedData.id = _.uniqueId('feed_')
 
-          const postsWithId = postsData.map((post) => ({
+          const postsWithId = postsData.map(post => ({
             ...post,
             id: _.uniqueId('post_'),
             feedId: feedData.id,
