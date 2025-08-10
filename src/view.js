@@ -1,30 +1,28 @@
 export default (state, elements, i18n) => {
-  const { feedback, input, submit, feedsList, postsList } = elements
+  const { feedback, input, submit, feedsList, postsList, successMessage } = elements
 
-  // Сброс классов и текста ошибок
   input.classList.remove('is-invalid')
   feedback.classList.remove('invalid-feedback', 'text-success')
   feedback.textContent = ''
 
-  // Управление кнопкой сабмита по статусу
   submit.disabled = state.form.status === 'sending'
 
-  // Ошибки
   if (state.form.status === 'error') {
     input.classList.add('is-invalid')
     feedback.textContent = i18n.t(state.form.error)
     feedback.classList.add('invalid-feedback')
   }
 
-  // Успех
   if (state.form.status === 'success') {
-    feedback.textContent = i18n.t('rssLoaded')
-    feedback.classList.add('text-success')
+    successMessage.textContent = i18n.t('rssLoaded')
+    successMessage.style.display = 'block'
     input.value = ''
     input.focus()
+  } else {
+    successMessage.textContent = ''
+    successMessage.style.display = 'none'
   }
 
-  // Отрисовка фидов
   feedsList.innerHTML = ''
   state.feeds.forEach((feed) => {
     const li = document.createElement('li')
@@ -40,7 +38,6 @@ export default (state, elements, i18n) => {
     feedsList.append(li)
   })
 
-  // Отрисовка постов
   postsList.innerHTML = ''
   state.posts.forEach((post) => {
     const li = document.createElement('li')

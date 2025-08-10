@@ -30,9 +30,7 @@ const updatePosts = (watchedState, i18n) => {
           watchedState.posts.unshift(...newPostsWithIds)
         }
       })
-      .catch(() => {
-        // Не прерываем обновление при ошибках
-      })
+      .catch(() => {})
   })
 
   Promise.all(feedPromises).finally(() => {
@@ -64,10 +62,6 @@ export default () => {
     e.preventDefault()
     const formData = new FormData(e.target)
     const url = formData.get('url').trim()
-
-    const schema = yup.object({
-      url: yup.string().required().url()
-    })
 
     watchedState.form.status = 'sending'
     watchedState.form.error = null
