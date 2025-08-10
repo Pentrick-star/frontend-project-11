@@ -2,16 +2,16 @@ export default {
   ru: {
     translation: {
       errors: {
-        network: 'Ошибка сети',
-        urlExists: 'RSS уже существует',
-        invalidUrl: 'Ссылка должна быть валидным URL',
-        empty: 'Не должно быть пустым',
-        invalidRss: 'Ресурс не содержит валидный RSS',
+        network: 'networkError',
+        urlExists: 'rssExists',
+        invalidUrl: 'invalidUrl',
+        empty: 'empty',
+        invalidRss: 'noValidRss',
       },
       success: {
-        rssLoaded: 'RSS успешно загружен',
+        rssLoaded: 'rssLoaded',
       },
-      view: 'Просмотр',
+      view: 'view',
       close: 'Закрыть',
       readMore: 'Читать полностью',
     },
