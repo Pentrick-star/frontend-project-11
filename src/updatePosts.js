@@ -8,7 +8,7 @@ const getProxiedUrl = (url) => {
 }
 
 const updatePosts = (state, elements, i18n) => {
-  const feedPromises = state.feeds.map(feed => {
+  const feedPromises = state.feeds.map((feed) => {
     const url = getProxiedUrl(feed.url)
     return axios.get(url)
       .then(response => {
