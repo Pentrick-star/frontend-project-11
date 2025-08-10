@@ -25,7 +25,7 @@ export default [
     rules: {
       'semi': ['error', 'never'],
       'quotes': ['error', 'single'],
-      'brace-style': ['error', '1tbs'],
+      'brace-style': ['error', 'stroustrup'],
       'comma-dangle': ['error', 'always-multiline'],
       'no-unused-vars': 'error',
       'no-undef': 'error',

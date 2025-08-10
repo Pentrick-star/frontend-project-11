@@ -9,7 +9,8 @@ export default () => {
     try {
       new URL(url)
       return { isValid: true }
-    } catch {
+    }
+ catch {
       return { isValid: false, error: 'invalidUrl' }
     }
   }

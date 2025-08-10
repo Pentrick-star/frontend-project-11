@@ -46,7 +46,8 @@ export default () => {
     document.addEventListener('DOMContentLoaded', () => {
       initApp()
     })
-  } else {
+  }
+ else {
     initApp()
   }
 
@@ -85,7 +86,8 @@ export default () => {
     const watchedState = onChange(state, () => {
       try {
         initView(state, elements, i18n)
-      } catch (error) {
+      }
+ catch (error) {
         console.error('View update error:', error)
       }
     })
@@ -121,7 +123,8 @@ export default () => {
             const parsed = parse(response.data.contents)
             feedData = parsed.feed
             postsData = parsed.posts
-          } catch (error) {
+          }
+ catch (error) {
             console.error('Parse error:', error)
             watchedState.form.status = 'error'
             watchedState.form.error = 'invalidRss'
