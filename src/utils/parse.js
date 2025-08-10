@@ -25,7 +25,7 @@ export default (xmlString) => {
 
   const items = xml.querySelectorAll('item')
 
-  const posts = Array.from(items).map((item) => ({
+  const posts = Array.from(items).map(item => ({
     id: item.querySelector('guid')?.textContent?.trim() || item.querySelector('link')?.textContent?.trim() || '',
     title: item.querySelector('title')?.textContent?.trim() ?? '',
     description: item.querySelector('description')?.textContent?.trim() ?? '',

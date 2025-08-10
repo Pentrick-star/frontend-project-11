@@ -20,11 +20,11 @@ const updatePosts = (watchedState, i18n) => {
       .then((response) => {
         const { posts } = parse(response.data.contents)
 
-        const existingLinks = watchedState.posts.map((post) => post.link)
-        const newPosts = posts.filter((post) => !existingLinks.includes(post.link))
+        const existingLinks = watchedState.posts.map(post => post.link)
+        const newPosts = posts.filter(post => !existingLinks.includes(post.link))
 
         if (newPosts.length > 0) {
-          const newPostsWithIds = newPosts.map((post) => ({
+          const newPostsWithIds = newPosts.map(post => ({
             ...post,
             id: _.uniqueId('post_'),
             feedId: feed.id,
@@ -32,7 +32,8 @@ const updatePosts = (watchedState, i18n) => {
           watchedState.posts.unshift(...newPostsWithIds)
         }
       })
-      .catch(() => {})
+      .catch(() => {
+      })
   })
 
   Promise.all(feedPromises).finally(() => {
@@ -110,7 +111,7 @@ export default () => {
       watchedState.form.status = 'sending'
       watchedState.form.error = null
 
-      if (watchedState.feeds.some((feed) => feed.url === url)) {
+      if (watchedState.feeds.some(feed => feed.url === url)) {
         watchedState.form.status = 'error'
         watchedState.form.error = 'rssExists'
         return
@@ -134,7 +135,7 @@ export default () => {
           feedData.url = url
           feedData.id = _.uniqueId('feed_')
 
-          const postsWithId = postsData.map((post) => ({
+          const postsWithId = postsData.map(post => ({
             ...post,
             id: _.uniqueId('post_'),
             feedId: feedData.id,
@@ -146,7 +147,7 @@ export default () => {
 
           updatePosts(watchedState, i18n)
         })
-        .catch((error) => {
+        .catch(error => {
           console.error('Network error:', error)
           watchedState.form.status = 'error'
           watchedState.form.error = 'networkError'
@@ -158,7 +159,7 @@ export default () => {
         const postId = e.target.dataset.id
         if (!postId) return
 
-        const post = state.posts.find((p) => p.id === postId)
+        const post = state.posts.find(p => p.id === postId)
         if (!post) return
 
         watchedState.readPosts.add(postId)

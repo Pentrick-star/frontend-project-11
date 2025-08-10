@@ -23,8 +23,8 @@ export default [
       },
     },
     rules: {
-      semi: ['error', 'never'],
-      quotes: ['error', 'single'],
+      'semi': ['error', 'never'],
+      'quotes': ['error', 'single'],
       'brace-style': ['error', '1tbs'],
       'comma-dangle': ['error', 'always-multiline'],
       'no-unused-vars': 'error',

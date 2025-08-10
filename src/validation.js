@@ -1,5 +1,5 @@
 export default () => {
-  return (data) => {
+  return data => {
     const { url } = data
 
     // Check if URL is empty
