@@ -1,19 +1,7 @@
+import ru from './ru/translation.json'
+import en from './en/translation.json'
+
 export default {
-  ru: {
-    translation: {
-      errors: {
-        network: 'networkError',
-        urlExists: 'rssExists',
-        invalidUrl: 'invalidUrl',
-        empty: 'empty',
-        invalidRss: 'noValidRss',
-      },
-      success: {
-        rssLoaded: 'rssLoaded',
-      },
-      view: 'view',
-      close: 'Закрыть',
-      readMore: 'Читать полностью',
-    },
-  },
+  ru: { translation: ru },
+  en: { translation: en }
 }

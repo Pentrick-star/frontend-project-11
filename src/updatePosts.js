@@ -1,7 +1,7 @@
 import axios from 'axios'
 import _ from 'lodash'
-import parse from './utils/parser.js'
-import { renderPosts } from './view.js'
+import parse from './utils/parse.js'
+import initView from './view.js'
 
 const getProxiedUrl = (url) => {
   const proxy = 'https://allorigins.hexlet.app/get'
@@ -24,8 +24,10 @@ const updatePosts = (state, elements, i18n) => {
             id: _.uniqueId('post_'),
             feedId: feed.id,
           }))
-          state.posts = [...newPostsWithIds, ...state.posts]
-          renderPosts(state, elements, i18n)
+          // Обновляем posts через watchedState
+          if (state.posts) {
+            state.posts.unshift(...newPostsWithIds)
+          }
         }
       })
       .catch(() => {
@@ -35,6 +37,7 @@ const updatePosts = (state, elements, i18n) => {
 
   Promise.all(feedPromises)
     .finally(() => {
+      // Используем setTimeout для следующего обновления
       setTimeout(() => updatePosts(state, elements, i18n), 5000)
     })
 }
