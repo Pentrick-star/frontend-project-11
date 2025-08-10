@@ -5,7 +5,7 @@ import view from './view.js'
 import parse from './utils/parse.js'
 import validationSchema from './validation.js'
 
-export default () => {
+const runApp = () => {
   const elements = {
     form: document.querySelector('.rss-form'),
     input: document.querySelector('input[name="url"]'),
@@ -40,7 +40,7 @@ export default () => {
         .then(() => {
           if (watchedState.feeds.some((feed) => feed.url === url)) {
             watchedState.form.status = 'error'
-            watchedState.form.error = 'rssExists'
+            watchedState.form.error = 'rssExists' // ключ из i18n
             return
           }
 
@@ -109,3 +109,5 @@ export default () => {
     })
   })
 }
+
+runApp()
