@@ -1,7 +1,6 @@
 import axios from 'axios'
 import _ from 'lodash'
 import parse from './utils/parse.js'
-import initView from './view.js'
 
 const getProxiedUrl = (url) => {
   const proxy = 'https://allorigins.hexlet.app/get'

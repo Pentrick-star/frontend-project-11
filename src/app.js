@@ -27,7 +27,7 @@ const updatePosts = (watchedState, i18n) => {
           const newPostsWithIds = newPosts.map((post) => ({
             ...post,
             id: _.uniqueId('post_'),
-            feedId: feed.id
+            feedId: feed.id,
           }))
           watchedState.posts.unshift(...newPostsWithIds)
         }
@@ -58,7 +58,7 @@ export default () => {
       feedback: document.querySelector('.feedback'),
       successMessage: document.querySelector('.success-message'),
       feedsList: document.querySelector('.feeds'),
-      postsList: document.querySelector('.posts')
+      postsList: document.querySelector('.posts'),
     }
 
     // Проверяем что все элементы найдены
@@ -73,14 +73,14 @@ export default () => {
       readPosts: new Set(),
       form: {
         status: 'filling',
-        error: null
-      }
+        error: null,
+      },
     }
 
     const i18n = i18next.createInstance()
     i18n.init({
       lng: 'ru',
-      resources
+      resources,
     })
 
     const watchedState = onChange(state, () => {
@@ -100,7 +100,7 @@ export default () => {
       const url = formData.get('url').trim()
 
       // Validate URL before making network request
-      const validation = validateUrl(i18n)({ url })
+      const validation = validateUrl()({ url })
       if (!validation.isValid) {
         watchedState.form.status = 'error'
         watchedState.form.error = validation.error
@@ -137,7 +137,7 @@ export default () => {
           const postsWithId = postsData.map((post) => ({
             ...post,
             id: _.uniqueId('post_'),
-            feedId: feedData.id
+            feedId: feedData.id,
           }))
 
           watchedState.feeds.unshift(feedData)
@@ -175,7 +175,7 @@ export default () => {
 
           const modalElement = document.getElementById('modal')
           if (modalElement) {
-            const modal = new bootstrap.Modal(modalElement)
+            const modal = new window.bootstrap.Modal(modalElement)
             modal.show()
           }
         }
