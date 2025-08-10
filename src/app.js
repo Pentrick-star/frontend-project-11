@@ -5,6 +5,7 @@ import initView from './view.js'
 import resources from './locales/index.js'
 import parse from './utils/parse.js'
 import _ from 'lodash'
+import 'bootstrap/js/dist/modal'
 
 const getProxiedUrl = (url) => {
   const proxy = 'https://allorigins.hexlet.app/get'
@@ -25,7 +26,7 @@ const updatePosts = (watchedState, i18n) => {
           const newPostsWithIds = newPosts.map((post) => ({
             ...post,
             id: _.uniqueId('post_'),
-            feedId: feed.id,
+            feedId: feed.id
           }))
           watchedState.posts.unshift(...newPostsWithIds)
         }
@@ -39,26 +40,35 @@ const updatePosts = (watchedState, i18n) => {
 }
 
 export default () => {
+  const elements = {
+    form: document.querySelector('.rss-form'),
+    input: document.querySelector('#url-input'),
+    submit: document.querySelector('button[type="submit"]'),
+    feedback: document.querySelector('.feedback'),
+    successMessage: document.querySelector('.success-message'),
+    feedsList: document.querySelector('.feeds'),
+    postsList: document.querySelector('.posts')
+  }
+
   const state = {
     feeds: [],
     posts: [],
     readPosts: new Set(),
     form: {
       status: 'filling',
-      error: null,
-    },
+      error: null
+    }
   }
 
   const i18n = i18next.createInstance()
   i18n.init({
     lng: 'ru',
-    resources,
+    resources
   })
 
-  const watchedState = onChange(state, initView(state, i18n))
+  const watchedState = onChange(state, () => initView(state, elements, i18n))
 
-  const form = document.querySelector('.rss-form')
-  form.addEventListener('submit', (e) => {
+  elements.form.addEventListener('submit', (e) => {
     e.preventDefault()
     const formData = new FormData(e.target)
     const url = formData.get('url').trim()
@@ -92,7 +102,7 @@ export default () => {
         const postsWithId = postsData.map((post) => ({
           ...post,
           id: _.uniqueId('post_'),
-          feedId: feedData.id,
+          feedId: feedData.id
         }))
 
         watchedState.feeds.unshift(feedData)
@@ -107,8 +117,7 @@ export default () => {
       })
   })
 
-  const postsList = document.querySelector('.posts-list')
-  postsList.addEventListener('click', (e) => {
+  elements.postsList.addEventListener('click', (e) => {
     if (e.target.tagName === 'BUTTON') {
       const postId = e.target.dataset.id
       if (!postId) return
