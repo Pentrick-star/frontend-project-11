@@ -4,6 +4,7 @@ import initI18n from './i18n.js'
 import view from './view.js'
 import parse from './utils/parse.js'
 import validationSchema from './validation.js'
+import _ from 'lodash'
 
 const runApp = () => {
   const elements = {
@@ -40,7 +41,7 @@ const runApp = () => {
         .then(() => {
           if (watchedState.feeds.some((feed) => feed.url === url)) {
             watchedState.form.status = 'error'
-            watchedState.form.error = 'rssExists' // ключ из i18n
+            watchedState.form.error = 'rssExists'
             return
           }
 
@@ -63,13 +64,16 @@ const runApp = () => {
                 return
               }
 
-              feedData.url = url
-              watchedState.feeds.unshift(feedData)
+              feedData.id = _.uniqueId('feed_')
 
-              // Добавляем уникальные посты (по id)
-              const existingPostIds = new Set(watchedState.posts.map((p) => p.id))
-              const newPosts = postsData.filter((post) => !existingPostIds.has(post.id))
-              watchedState.posts.unshift(...newPosts)
+              const postsWithId = postsData.map((post) => ({
+                ...post,
+                id: _.uniqueId('post_'),
+                feedId: feedData.id,
+              }))
+
+              watchedState.feeds.unshift(feedData)
+              watchedState.posts.unshift(...postsWithId)
 
               watchedState.form.status = 'success'
             })
@@ -78,9 +82,9 @@ const runApp = () => {
               watchedState.form.error = 'networkError'
             })
         })
-        .catch((err) => {
+        .catch(() => {
           watchedState.form.status = 'error'
-          watchedState.form.error = err.errors[0] === 'url must be a valid URL' ? 'invalidUrl' : 'empty'
+          watchedState.form.error = 'invalidUrl'
         })
     })
 
