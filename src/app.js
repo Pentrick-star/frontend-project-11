@@ -6,6 +6,7 @@ import resources from './locales/index.js'
 import parse from './utils/parse.js'
 import _ from 'lodash'
 import 'bootstrap/js/dist/modal'
+import validateUrl from './validation.js'
 
 const getProxiedUrl = (url) => {
   const proxy = 'https://allorigins.hexlet.app/get'
@@ -97,6 +98,14 @@ export default () => {
       e.preventDefault()
       const formData = new FormData(e.target)
       const url = formData.get('url').trim()
+
+      // Validate URL before making network request
+      const validation = validateUrl(i18n)({ url })
+      if (!validation.isValid) {
+        watchedState.form.status = 'error'
+        watchedState.form.error = validation.error
+        return
+      }
 
       watchedState.form.status = 'sending'
       watchedState.form.error = null

@@ -4,6 +4,8 @@
   "empty": "Must not be empty",
   "invalidUrl": "Link must be a valid URL",
   "noValidRss": "The resource does not contain valid RSS",
+  "invalidRss": "The resource does not contain valid RSS",
+  "unknown": "Unknown error",
   "view": "View",
   "networkError": "Network error"
 }

@@ -1,17 +1,20 @@
 import * as yup from 'yup'
 
 export default (i18n) => {
-  yup.setLocale({
-    mixed: {
-      required: () => i18n.t('empty'),
-      notOneOf: () => i18n.t('rssExists'),
-    },
-    string: {
-      url: () => i18n.t('invalidUrl'),
-    },
-  })
-
-  return yup.object({
-    url: yup.string().required().url(),
-  })
+  return (data) => {
+    const { url } = data
+    
+    // Check if URL is empty
+    if (!url || url.trim() === '') {
+      return { isValid: false, error: 'empty' }
+    }
+    
+    // Check if URL is valid
+    try {
+      new URL(url)
+      return { isValid: true }
+    } catch (error) {
+      return { isValid: false, error: 'invalidUrl' }
+    }
+  }
 }
