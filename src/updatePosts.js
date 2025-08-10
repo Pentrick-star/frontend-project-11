@@ -18,7 +18,7 @@ const updatePosts = (state, elements, i18n) => {
         const newPosts = posts.filter(post => !existingLinks.includes(post.link))
 
         if (newPosts.length > 0) {
-          const newPostsWithIds = newPosts.map((post) => ({
+          const newPostsWithIds = newPosts.map(post => ({
             ...post,
             id: _.uniqueId('post_'),
             feedId: feed.id,
