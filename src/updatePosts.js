@@ -14,8 +14,8 @@ const updatePosts = (state, elements, i18n) => {
       .then(response => {
         const { posts } = parse(response.data.contents)
 
-        const existingLinks = state.posts.map((post) => post.link)
-        const newPosts = posts.filter((post) => !existingLinks.includes(post.link))
+        const existingLinks = state.posts.map(post => post.link)
+        const newPosts = posts.filter(post => !existingLinks.includes(post.link))
 
         if (newPosts.length > 0) {
           const newPostsWithIds = newPosts.map((post) => ({

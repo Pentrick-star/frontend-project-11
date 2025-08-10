@@ -107,7 +107,7 @@ export default () => {
       watchedState.form.status = 'sending'
       watchedState.form.error = null
 
-      if (watchedState.feeds.some((feed) => feed.url === url)) {
+      if (watchedState.feeds.some(feed => feed.url === url)) {
         watchedState.form.status = 'error'
         watchedState.form.error = 'rssExists'
         return
@@ -155,7 +155,7 @@ export default () => {
         const postId = e.target.dataset.id
         if (!postId) return
 
-        const post = state.posts.find((p) => p.id === postId)
+        const post = state.posts.find(p => p.id === postId)
         if (!post) return
 
         watchedState.readPosts.add(postId)
