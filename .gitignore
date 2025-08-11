@@ -33,6 +33,3 @@ logs
 # Coverage reports
 coverage/
 *.lcov
-
-# SonarCloud
-.scannerwork/
